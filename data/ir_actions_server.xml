@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
+<openerp>
   <record model="ir.actions.server" id="action_stock_analysis">
     <field name="child_ids" eval="[(6, 0, [])]"/>
-    <field name="code"><![CDATA[model.env.cr.execute("""SELECT count(*) FROM pg_tables WHERE tablename ='%s'""" % (model._table))
-istable = model.env.cr.fetchall()
+    <field name="code"><![CDATA[cr.execute("""SELECT count(*) FROM pg_tables WHERE tablename ='%s'""" % (model._table))
+istable = cr.fetchall()
 validator = float(str(istable[0])[1])
 if validator > 0:
-    model.env.cr.execute("""DROP TABLE %s""" % (model._table))
+    cr.execute("""DROP TABLE %s""" % (model._table))
 
-model.env.cr.execute("""
+cr.execute("""
             CREATE or replace VIEW %s AS (
               SELECT MIN(id) as id,
                 virtual_table.x_move_id as x_move_id,
@@ -183,4 +183,4 @@ model.env.cr.execute("""
     <field name="sequence">5</field>
     <field name="state">code</field>
   </record>
-</odoo>
+</openerp>

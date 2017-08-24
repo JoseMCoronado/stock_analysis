@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
+<openerp>
     <record model="ir.ui.view" id="analysis_stock_tree_view">
       <field name="name">x_jos.stock.analysis.tree.view</field>
       <field name="model">x_stock_analysis</field>
@@ -41,4 +41,4 @@
            </pivot>
       </field>
     </record>
-</odoo>
+</openerp>
