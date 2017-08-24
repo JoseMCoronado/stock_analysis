@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record model="ir.actions.server" id="action_stock_analysis">
+    <field name="child_ids" eval="[(6, 0, [])]"/>
+    <field name="code"><![CDATA[model.env.cr.execute("""SELECT count(*) FROM pg_tables WHERE tablename ='%s'""" % (model._table))
+istable = model.env.cr.fetchall()
+validator = float(str(istable[0])[1])
+if validator > 0:
+    model.env.cr.execute("""DROP TABLE %s""" % (model._table))
+
+model.env.cr.execute("""
+            CREATE or replace VIEW %s AS (
+              SELECT MIN(id) as id,
+                virtual_table.x_move_id as x_move_id,
+                virtual_table.x_location_id as x_location_id,
+                virtual_table.x_company_id as x_company_id,
+                virtual_table.x_product_id as x_product_id,
+                virtual_table.x_product_categ_id as x_product_categ_id,
+                virtual_table.x_product_template_id as x_product_template_id,
+                SUM(virtual_table.x_incoming) as x_incoming,
+                SUM(virtual_table.x_outgoing) as x_outgoing,
+                SUM(virtual_table.x_quantity) as x_quantity,
+                virtual_table.date as x_date,
+                SUM(virtual_table.x_price_unit_on_quant * virtual_table.x_quantity) / SUM(virtual_table.x_quantity) as x_price_unit_on_quant,
+                virtual_table.x_source as x_source,
+                virtual_table.x_vendor as x_vendor,
+                (SUM(virtual_table.x_quantity) - SUM(virtual_table.x_outgoing)) as x_available,
+                (SUM(virtual_table.x_quantity) + SUM(virtual_table.x_incoming) - SUM(virtual_table.x_outgoing)) as x_net_available
+                FROM
+                ((SELECT
+                    stock_move.id AS id,
+                    stock_move.id AS x_move_id,
+                    dest_location.id AS x_location_id,
+                    dest_location.company_id AS x_company_id,
+                    stock_move.product_id AS x_product_id,
+                    product_template.id AS x_product_template_id,
+                    product_template.categ_id AS x_product_categ_id,
+                    quant.qty AS x_quantity,
+                    (quant.qty - quant.qty) AS x_incoming,
+                    (quant.qty - quant.qty) AS x_outgoing,
+                    stock_move.date AS date,
+                    quant.cost as x_price_unit_on_quant,
+                    stock_move.origin AS x_source,
+                    product_template.x_vendor AS x_vendor
+
+                FROM
+                    stock_quant as quant
+                JOIN
+                    stock_quant_move_rel ON stock_quant_move_rel.quant_id = quant.id
+                JOIN
+                    stock_move ON stock_move.id = stock_quant_move_rel.move_id
+                JOIN
+                    stock_location dest_location ON stock_move.location_dest_id = dest_location.id
+                JOIN
+                    stock_location source_location ON stock_move.location_id = source_location.id
+                JOIN
+                    product_product ON product_product.id = stock_move.product_id
+                JOIN
+                    product_template ON product_template.id = product_product.product_tmpl_id
+
+
+                WHERE quant.qty>0 AND stock_move.state = 'done' AND dest_location.usage in ('internal', 'transit')
+                AND (
+                    not (source_location.company_id is null and dest_location.company_id is null) or
+                    source_location.company_id != dest_location.company_id or
+                    source_location.usage not in ('internal', 'transit'))
+                )
+                UNION ALL
+                (SELECT
+                    (-1) * stock_move.id AS id,
+                    stock_move.id AS x_move_id,
+                    source_location.id AS x_location_id,
+                    source_location.company_id AS x_company_id,
+                    stock_move.product_id AS x_product_id,
+                    product_template.id AS x_product_template_id,
+                    product_template.categ_id AS x_product_categ_id,
+                    - quant.qty AS x_quantity,
+                    (quant.qty - quant.qty) AS x_incoming,
+                    (quant.qty - quant.qty) AS x_outgoing,
+                    stock_move.date AS date,
+                    quant.cost as x_price_unit_on_quant,
+                    stock_move.origin AS x_source,
+                    product_template.x_vendor AS x_vendor
+
+                FROM
+                    stock_quant as quant
+                JOIN
+                    stock_quant_move_rel ON stock_quant_move_rel.quant_id = quant.id
+                JOIN
+                    stock_move ON stock_move.id = stock_quant_move_rel.move_id
+                JOIN
+                    stock_location source_location ON stock_move.location_id = source_location.id
+                JOIN
+                    stock_location dest_location ON stock_move.location_dest_id = dest_location.id
+                JOIN
+                    product_product ON product_product.id = stock_move.product_id
+                JOIN
+                    product_template ON product_template.id = product_product.product_tmpl_id
+
+
+                WHERE quant.qty>0 AND stock_move.state = 'done' AND source_location.usage in ('internal', 'transit')
+                AND (
+                    not (dest_location.company_id is null and source_location.company_id is null) or
+                    dest_location.company_id != source_location.company_id or
+                    dest_location.usage not in ('internal', 'transit'))
+                )
+                UNION ALL
+                (SELECT
+                    (-100000) - move.id AS id,
+                    move.id AS x_move_id,
+                    source_location.id AS x_location_id,
+                    source_location.company_id AS x_company_id,
+                    move.product_id AS x_product_id,
+                    product_template.id AS x_product_template_id,
+                    product_template.categ_id AS x_product_categ_id,
+                    (move.product_uom_qty - move.product_uom_qty ) AS x_quantity,
+                    (move.product_uom_qty - move.product_uom_qty )  AS x_incoming,
+                    move.product_uom_qty AS x_outgoing,
+                    move.date AS date,
+                    (move.product_uom_qty - move.product_uom_qty )  as x_price_unit_on_quant,
+                    move.origin AS x_source,
+                    product_template.x_vendor AS x_vendor
+
+                FROM
+                    stock_move as move
+                JOIN
+                    stock_picking_type types ON move.picking_type_id = types.id
+                JOIN
+                    stock_location source_location ON move.location_id = source_location.id
+                JOIN
+                    stock_location dest_location ON move.location_dest_id = dest_location.id
+                JOIN
+                    product_product ON product_product.id = move.product_id
+                JOIN
+                    product_template ON product_template.id = product_product.product_tmpl_id
+
+                WHERE move.state in ('waiting','confirmed','assigned') AND types.code in ('outgoing','internal')
+                )
+                UNION ALL
+                (SELECT
+                    (100000) + move.id AS id,
+                    move.id AS x_move_id,
+                    dest_location.id AS x_location_id,
+                    dest_location.company_id AS x_company_id,
+                    move.product_id AS x_product_id,
+                    product_template.id AS x_product_template_id,
+                    product_template.categ_id AS x_product_categ_id,
+                    (move.product_uom_qty - move.product_uom_qty )  AS x_quantity,
+                    move.product_uom_qty AS x_incoming,
+                    (move.product_uom_qty - move.product_uom_qty )  AS x_outgoing,
+                    move.date AS date,
+                    (move.product_uom_qty - move.product_uom_qty )  as x_price_unit_on_quant,
+                    move.origin AS x_source,
+                    product_template.x_vendor AS x_vendor
+
+                FROM
+                    stock_move as move
+                JOIN
+                    stock_picking_type types ON move.picking_type_id = types.id
+                JOIN
+                    stock_location source_location ON move.location_id = source_location.id
+                JOIN
+                    stock_location dest_location ON move.location_dest_id = dest_location.id
+                JOIN
+                    product_product ON product_product.id = move.product_id
+                JOIN
+                    product_template ON product_template.id = product_product.product_tmpl_id
+
+
+                WHERE move.state in ('waiting','confirmed','assigned') AND types.code in ('incoming','internal')
+                )
+                )
+                AS virtual_table
+                GROUP BY x_move_id, x_location_id, x_company_id, x_product_id, x_product_categ_id, x_date, x_source, x_product_template_id, x_vendor
+            )""" % (model._table))
+      ]]>
+    </field>
+    <field name="crud_model_id" eval="False"/>
+    <field name="help" eval="False"/>
+    <field name="link_field_id" eval="False"/>
+    <field name="model_id" ref="stock_analysis.model_stock_analysis"/>
+    <field name="name">[JOS] Stock Analysis Report (DO NOT CHANGE)</field>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+  </record>
+</odoo>

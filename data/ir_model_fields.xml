@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+    <record model="ir.model.fields" id="analysis_stock_move">
+        <field name="field_description">Stock Move</field>
+        <field name="name">x_move_id</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="relation">stock.move</field>
+        <field name="ttype">many2one</field>
+    </record>
+    <record model="ir.model.fields" id="analysis_stock_location">
+        <field name="field_description">Stock Location</field>
+        <field name="name">x_location_id</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="relation">stock.location</field>
+        <field name="ttype">many2one</field>
+    </record>
+    <record model="ir.model.fields" id="analysis_res_company">
+        <field name="field_description">Company</field>
+        <field name="name">x_company_id</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="relation">res.company</field>
+        <field name="ttype">many2one</field>
+    </record>
+    <record model="ir.model.fields" id="analysis_product_product">
+        <field name="field_description">Product</field>
+        <field name="name">x_product_id</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="relation">product.product</field>
+        <field name="ttype">many2one</field>
+    </record>
+    <record model="ir.model.fields" id="analysis_product_category">
+        <field name="field_description">Category</field>
+        <field name="name">x_product_categ_id</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="relation">product.category</field>
+        <field name="ttype">many2one</field>
+    </record>
+    <record model="ir.model.fields" id="analysis_product_template">
+        <field name="field_description">Product Template</field>
+        <field name="name">x_product_template_id</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="relation">product.template</field>
+        <field name="ttype">many2one</field>
+    </record>
+    <record model="ir.model.fields" id="analysis_res_partner">
+        <field name="field_description">Vendor</field>
+        <field name="name">x_vendor</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="relation">res.partner</field>
+        <field name="ttype">many2one</field>
+    </record>
+    <record model="ir.model.fields" id="analysis_source">
+        <field name="field_description">Source</field>
+        <field name="name">x_source</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="False"/>
+        <field name="ttype">char</field>
+    </record>
+    <record model="ir.model.fields" id="analysis_valuation">
+        <field name="field_description">Valuation</field>
+        <field name="name">x_price_unit_on_quant</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="ttype">float</field>
+    </record>
+    <record model="ir.model.fields" id="analysis_date">
+        <field name="field_description">Date</field>
+        <field name="name">x_date</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="ttype">date</field>
+    </record>
+    <record model="ir.model.fields" id="analysis_net_available">
+        <field name="field_description">Net Available</field>
+        <field name="name">x_net_available</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="ttype">float</field>
+    </record>
+    <record model="ir.model.fields" id="analysis_qty">
+        <field name="field_description">Quantity</field>
+        <field name="name">x_quantity</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="ttype">float</field>
+    </record>
+    <record model="ir.model.fields" id="analysis_incoming">
+        <field name="field_description">Incoming</field>
+        <field name="name">x_incoming</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="ttype">float</field>
+    </record>
+    <record model="ir.model.fields" id="analysis_outgoing">
+        <field name="field_description">Outgoing</field>
+        <field name="name">x_outgoing</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="ttype">float</field>
+    </record>
+    <record model="ir.model.fields" id="analysis_available_now">
+        <field name="field_description">Available Now</field>
+        <field name="name">x_available</field>
+        <field name="model">x_stock_analysis</field>
+        <field name="model_id" ref="stock_analysis.model_stock_analysis" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="ttype">float</field>
+    </record>
+    <record model="ir.model.fields" id="product_primary_vendor">
+      <field name="domain">[]</field>
+      <field name="depends">seller_ids</field>
+      <field name="compute"><![CDATA[for record in self:
+        if record.seller_ids:
+          record['x_vendor'] = record.seller_ids[0].name
+        ]]></field>
+      <field name="field_description">Primary Vendor</field>
+      <field name="groups" eval="[(6, 0, [])]"/>
+      <field name="model">product.template</field>
+      <field name="model_id" ref="product.model_product_template"/>
+      <field name="name">x_vendor</field>
+      <field name="on_delete">set null</field>
+      <field name="readonly" eval="True"/>
+      <field name="related" eval="False"/>
+      <field name="relation">res.partner</field>
+      <field name="relation_field" eval="False"/>
+      <field name="required" eval="False"/>
+      <field name="selectable" eval="True"/>
+      <field name="size" eval="False"/>
+      <field name="state">manual</field>
+      <field name="store" eval="True"/>
+      <field name="translate" eval="False"/>
+      <field name="ttype">many2one</field>
+    </record>
+  </data>
+</odoo>

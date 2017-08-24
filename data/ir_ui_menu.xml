@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.menu" id="analysis_menu_pivot">
+      <field ref="stock_analysis.analysis_action_report" name="action"/>
+      <field name="active" eval="True"/>
+      <field name="groups_id" eval="[(6, 0, [])]"/>
+      <field name="name">Stock Analysis</field>
+      <field ref="stock.menu_stock_inventory_control" name="parent_id"/>
+      <field name="sequence">99</field>
+      <field name="web_icon" eval="False"/>
+    </record>
+</odoo>
