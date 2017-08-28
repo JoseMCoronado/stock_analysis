@@ -38,7 +38,7 @@ cr.execute("""
                     quant.qty AS x_quantity,
                     (quant.qty - quant.qty) AS x_incoming,
                     (quant.qty - quant.qty) AS x_outgoing,
-                    stock_move.date AS date,
+                    stock_move.date_expected AS date,
                     quant.cost as x_price_unit_on_quant,
                     stock_move.origin AS x_source,
                     product_template.x_vendor AS x_vendor
@@ -77,7 +77,7 @@ cr.execute("""
                     - quant.qty AS x_quantity,
                     (quant.qty - quant.qty) AS x_incoming,
                     (quant.qty - quant.qty) AS x_outgoing,
-                    stock_move.date AS date,
+                    stock_move.date_expected AS date,
                     quant.cost as x_price_unit_on_quant,
                     stock_move.origin AS x_source,
                     product_template.x_vendor AS x_vendor
@@ -116,7 +116,7 @@ cr.execute("""
                     (move.product_uom_qty - move.product_uom_qty ) AS x_quantity,
                     (move.product_uom_qty - move.product_uom_qty )  AS x_incoming,
                     move.product_uom_qty AS x_outgoing,
-                    move.date AS date,
+                    move.date_expected AS date,
                     (move.product_uom_qty - move.product_uom_qty )  as x_price_unit_on_quant,
                     move.origin AS x_source,
                     product_template.x_vendor AS x_vendor
@@ -148,7 +148,7 @@ cr.execute("""
                     (move.product_uom_qty - move.product_uom_qty )  AS x_quantity,
                     move.product_uom_qty AS x_incoming,
                     (move.product_uom_qty - move.product_uom_qty )  AS x_outgoing,
-                    move.date AS date,
+                    move.date_expected AS date,
                     (move.product_uom_qty - move.product_uom_qty )  as x_price_unit_on_quant,
                     move.origin AS x_source,
                     product_template.x_vendor AS x_vendor

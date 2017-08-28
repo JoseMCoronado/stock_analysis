@@ -117,7 +117,7 @@
         <field name="ttype">float</field>
     </record>
     <record model="ir.model.fields" id="analysis_date">
-        <field name="field_description">Date</field>
+        <field name="field_description">Est. Ship/Arrival Date</field>
         <field name="name">x_date</field>
         <field name="model">x_stock_analysis</field>
         <field name="model_id" ref="stock_analysis.model_stock_analysis" />
@@ -141,7 +141,7 @@
         <field name="ttype">float</field>
     </record>
     <record model="ir.model.fields" id="analysis_qty">
-        <field name="field_description">Quantity</field>
+        <field name="field_description">On Hand</field>
         <field name="name">x_quantity</field>
         <field name="model">x_stock_analysis</field>
         <field name="model_id" ref="stock_analysis.model_stock_analysis" />
