@@ -31,7 +31,7 @@
       <field name="inherit_id" eval="False"/>
       <field name="priority">16</field>
       <field name="arch" type="xml">
-          <pivot string="Stock Analysis" > <!--disable_linking="True"-->
+          <pivot string="Stock Analysis" disable_linking="True">
                <field name="x_location_id" type="row"/>
                <field name="x_incoming" type="measure"/>
                <field name="x_quantity" type="measure"/>

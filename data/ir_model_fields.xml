@@ -126,7 +126,7 @@
         <field name="state">manual</field>
         <field name="store" eval="True"/>
         <field name="readonly" eval="True"/>
-        <field name="ttype">date</field>
+        <field name="ttype">datetime</field>
     </record>
     <record model="ir.model.fields" id="analysis_net_available">
         <field name="field_description">Net Available</field>

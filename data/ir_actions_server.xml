@@ -183,4 +183,16 @@ model.env.cr.execute("""
     <field name="sequence">5</field>
     <field name="state">code</field>
   </record>
+  <record model="ir.cron" id="ir_cron_schedule_report">
+      <field name="name">Stock Analysis Report</field>
+      <field name="model_id" ref="stock_analysis.model_stock_analysis"/>
+      <field name="state">multi</field>
+      <field name="user_id" ref="base.user_root"/>
+      <field name="interval_number">1</field>
+      <field name="interval_type">weeks</field>
+      <field name="numbercall">-1</field>
+      <field name="nextcall" eval="datetime.now().strftime('%Y-%m-%d 00:00:00')"/>
+      <field name="priority">5</field>
+      <field name="child_ids" eval="[(6, 0, [ref('model_stock_analysis')])]"/>
+    </record>
 </odoo>
